@@ -1,0 +1,6 @@
+make: Entering directory `/Users/federico.gutierrez/Develop/DowJones/servo/provider-poc/terraform-provider-servo'
+go build -o terraform-provider-servo
+mkdir -p ~/.terraform.d/plugins/local/poc/servo/0.1/darwin_amd64
+mv terraform-provider-servo ~/.terraform.d/plugins/local/poc/servo/0.1/darwin_amd64
+make: Leaving directory `/Users/federico.gutierrez/Develop/DowJones/servo/provider-poc/terraform-provider-servo'
+ 
