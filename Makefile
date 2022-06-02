@@ -35,3 +35,9 @@ test:
 
 testacc: 
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m   
+
+run:
+	make install
+	rm terraform/.terraform.lock.hcl
+	rm -R terraform/.terraform
+	rm terraform/terraform.tfstate

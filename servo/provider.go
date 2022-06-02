@@ -14,7 +14,9 @@ func Provider() *schema.Provider {
 				// DefaultFunc: schema.EnvDefaultFunc("SERVO_TOKEN", nil),
 			},
 		},
-		ResourcesMap: map[string]*schema.Resource{},
+		ResourcesMap: map[string]*schema.Resource{
+			"servo_app": resourceApp(),
+		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"servo_apps": dataSourceApps(),
 		},
