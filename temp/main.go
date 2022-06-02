@@ -53,10 +53,16 @@ func main() {
 
 	tempArrs := make([]AppsRes, 0)
 
-	fmt.Print(resp.Body())
+	// fmt.Print(resp.Body())
 
 	ss := string(resp.Body())
 
 	apps := json.Unmarshal([]byte(ss), &tempArrs)
 	fmt.Printf("\n Apps: %v \n", apps)
+
+	// marshallErr := json.Unmarshal([]byte(ss), &tempArrs)
+	// if marshallErr != nil {
+	// 	panic(marshallErr)
+	// }
+	// fmt.Printf("\n Apps: %v \n", tempArrs)
 }

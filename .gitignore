@@ -29,3 +29,5 @@ terraform
 # vendor/
 
 .vscode
+
+debuggingAPIResponse 
