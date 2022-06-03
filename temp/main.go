@@ -13,8 +13,8 @@ type AppsRes struct {
 	Metadata  Metadata `json:"metadata,omitempty"`
 	Handle    string   `json:"handle,omitempty"`
 	Context   string   `json:"context,omitempty"`
-	UpdatedAt int64    `json:"updated_at,omitempty"`
-	CreatedAt int64    `json:"created_at,omitempty"`
+	UpdatedAt int64    `json:"updatedAt,omitempty"`
+	CreatedAt int64    `json:"createdAt,omitempty"`
 	Source    string   `json:"source,omitempty"`
 }
 type Metadata struct {
@@ -51,12 +51,14 @@ func main() {
 		fmt.Println(err)
 	}
 
-	tempArrs := make([]AppsRes, 0)
+	appArray := make([]AppsRes, 0)
 
-	fmt.Print(resp.Body())
-
+	fmt.Print(fmt.Sprintf("%s\n", resp.Body()))
 	ss := string(resp.Body())
 
-	apps := json.Unmarshal([]byte(ss), &tempArrs)
-	fmt.Printf("\n Apps: %v \n", apps)
+	marshallErr := json.Unmarshal([]byte(ss), &appArray)
+	if marshallErr != nil {
+			panic(marshallErr)
+	}
+	fmt.Printf("\n Apps: %v \n", appArray)
 }
