@@ -19,8 +19,8 @@ type AppsRes struct {
 	Metadata  Metadata `json:"metadata"`
 	Handle    string   `json:"handle"`
 	Context   string   `json:"context"`
-	UpdatedAt int64    `json:"updated_at,omitempty"`
-	CreatedAt int64    `json:"created_at"`
+	UpdatedAt int64    `json:"updatedAt,omitempty"`
+	CreatedAt int64    `json:"createdAt"`
 	Source    string   `json:"source"`
 }
 type Metadata struct {
@@ -100,11 +100,34 @@ func dataSourceAppsRead(ctx context.Context, d *schema.ResourceData, m interface
 		fmt.Println(err)
 	}
 
-	tempArrs := ArApps{}
-	apps := json.Unmarshal(resp.Body(), &tempArrs)
-	fmt.Printf("\n Apps: %v \n", apps)
+	// tempArrs := ArApps{}
 
-	if err := d.Set("apps", apps); err != nil {
+	//--
+	tempArrs := make([]AppsRes, 0)
+
+	// // fmt.Print(resp.Body())
+
+	// fmt.Print(fmt.Sprintf("%s\n", resp.Body()))
+	// fmt.Print(reflect.TypeOf(resp.Body()), "\n")
+
+	ss := string(resp.Body())
+
+	// apps := json.Unmarshal([]byte(ss), &tempArrs)
+	// fmt.Printf("\n Apps: %v \n", apps)
+
+	// fmt.Print(fmt.Sprintf("%s\n", resp.Body()))
+	// fmt.Print(reflect.TypeOf(resp.Body()), "\n")
+
+	marshallErr := json.Unmarshal([]byte(ss), &tempArrs)
+	if marshallErr != nil {
+		panic(marshallErr)
+	}
+	//--
+
+	// apps := json.Unmarshal(resp.Body(), &tempArrs)
+	// fmt.Printf("\n Apps: %v \n", apps)
+
+	if err := d.Set("apps", marshallErr); err != nil {
 		return diag.FromErr(err)
 	}
 
