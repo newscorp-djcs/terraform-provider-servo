@@ -18,7 +18,7 @@ func Provider() *schema.Provider {
 			"servo_app": resourceApp(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"servo_apps": dataSourceApps(),
+			"servo_app": dataSourceApps(),
 		},
 	}
 }
