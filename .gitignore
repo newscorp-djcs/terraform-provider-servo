@@ -17,7 +17,7 @@
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-terraform
+
 
 # Test binary, built with `go test -c`
 *.test
