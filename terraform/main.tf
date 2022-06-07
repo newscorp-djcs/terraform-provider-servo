@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "servo" {
-  # token = var.SERVO_TOKEN
+  token = var.SERVO_TOKEN
 }
 
 module "apps" {
@@ -22,4 +22,4 @@ output "apps" {
   value = module.apps.all_apps
 }
 
-# variable "SERVO_TOKEN" {}
+variable "SERVO_TOKEN" {}

@@ -45,9 +45,9 @@ func NewClient(host, token *string) (*Client, error) {
 		c.HostURL = *host
 	}
 
-	if token == nil {
-		c.Token = *token
-	}
+	// if token == nil {
+	c.Token = *token
+	// }
 
 	// If username or password not provided, return empty client
 	// if username == nil || password == nil {
