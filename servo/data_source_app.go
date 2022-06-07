@@ -83,8 +83,8 @@ func dataSourceAppsRead(ctx context.Context, d *schema.ResourceData, m interface
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	// req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/dev/regions/${region}/apps/${app_handle}", "https://next.onservo.com/api/"), nil)
-	req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/${org}/regions/virginia/apps/admin-djcss", "https://next.onservo.com/api/"), nil)
+	// req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/${org}/regions/${region}/apps/${app_handle}", "https://next.onservo.com/api/"), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/dev/regions/virginia/apps/admin-djcss", "https://next.onservo.com/api/"), nil)
 	if err != nil {
 		return diag.FromErr(err)
 	}
