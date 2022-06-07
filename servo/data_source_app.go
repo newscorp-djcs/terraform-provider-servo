@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	// "os"
 	"strconv"
@@ -73,8 +74,9 @@ func dataSourceApps() *schema.Resource {
 
 const HostURL string = "https://next.onservo.com/api"
 
-func dataSourceAppsRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	client := &http.Client{Timeout: 10 * time.Second}
+func (client *Client) dataSourceAppsRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	Token := os.Getenv("SERVO_TOKEN")
+	// c := client
 
 	// org := d.Get("org").(string)
 	// region := d.Get("region").(string)
@@ -88,15 +90,19 @@ func dataSourceAppsRead(ctx context.Context, d *schema.ResourceData, m interface
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	req.Header.Set("token", Token)
 
-	r, err := client.Do(req)
+	body, err := client.doRequest(req, Token)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	defer r.Body.Close()
+	// defer r.Body.Close()
 
-	apps := make([]map[string]interface{}, 0)
-	err = json.NewDecoder(r.Body).Decode(&apps)
+	apps := []AppsRes{}
+	err = json.Unmarshal(body, &apps)
+
+	// apps := make([]map[string]interface{}, 0)
+	// err = json.NewDecoder(body).Decode(&apps)
 	if err != nil {
 		return diag.FromErr(err)
 	}

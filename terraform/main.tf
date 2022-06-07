@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "servo" {
-  token = var.SERVO_TOKEN
+  # token = var.SERVO_TOKEN
 }
 
 module "apps" {
