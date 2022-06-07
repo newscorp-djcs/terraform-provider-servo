@@ -24,7 +24,7 @@ provider "servo" {
 resource "servo_app" "test" {
   app {
     handle = "provider-test"
-    # source = "https://github.com/test/myapp.git"
+    source = "https://github.com/test/myapp.git"
   }
 
 }

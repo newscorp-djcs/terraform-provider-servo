@@ -22,6 +22,7 @@ type AppsRes struct {
 	UpdatedAt int64    `json:"updated_at,omitempty"`
 	CreatedAt int64    `json:"created_at"`
 	Source    string   `json:"source"`
+	ID        int      `json:"id"`
 }
 type Metadata struct {
 	Stacks int `json:"stacks"`
