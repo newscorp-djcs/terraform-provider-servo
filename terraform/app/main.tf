@@ -12,7 +12,11 @@ variable "app_handle" {
   default = "admin-djcss"
 }
 
-data "servo_apps" "all" {}
+data "servo_apps" "all" {
+  # app_handle = "admin-djcss"
+  # region = "virginia"
+  # org = "dev"
+}
 
 # Returns all apps
 output "all_apps" {

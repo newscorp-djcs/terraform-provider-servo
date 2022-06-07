@@ -4,12 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
+	"net/http"
+
+	// "os"
 	"strconv"
 	"time"
 
-	cError "github.com/coreos/etcd/error"
-	"gopkg.in/resty.v1"
+	// cError "github.com/coreos/etcd/error"
+	// "gopkg.in/resty.v1"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -72,62 +74,34 @@ func dataSourceApps() *schema.Resource {
 const HostURL string = "https://next.onservo.com/api"
 
 func dataSourceAppsRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	client := &http.Client{Timeout: 10 * time.Second}
+
+	// org := d.Get("org").(string)
+	// region := d.Get("region").(string)
+	// app_handle := d.Get("app_handle").(string)
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	Token := os.Getenv("SERVO_TOKEN")
-
-	client := resty.New().
-		SetHostURL(HostURL).
-		// SetTimeout(timeout).
-		OnAfterResponse(func(c *resty.Client, r *resty.Response) error {
-			if r.IsSuccess() {
-				return nil
-			}
-
-			return cError.NewError(r.StatusCode(), "error", 0)
-		})
-
-	// Create a request
-	resp, err := client.R().
-		SetHeader("Content-Type", "application/json").
-		SetHeader("token", Token).
-		// SetBody(query).
-		Get("/orgs/dev/regions/virginia/apps")
-
+	// req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/dev/regions/${region}/apps/${app_handle}", "https://next.onservo.com/api/"), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/${org}/regions/virginia/apps/admin-djcss", "https://next.onservo.com/api/"), nil)
 	if err != nil {
-		fmt.Println(err)
+		return diag.FromErr(err)
 	}
 
-	// tempArrs := ArApps{}
-
-	//--
-	tempArrs := make([]AppsRes, 0)
-
-	// // fmt.Print(resp.Body())
-
-	// fmt.Print(fmt.Sprintf("%s\n", resp.Body()))
-	// fmt.Print(reflect.TypeOf(resp.Body()), "\n")
-
-	ss := string(resp.Body())
-
-	// apps := json.Unmarshal([]byte(ss), &tempArrs)
-	// fmt.Printf("\n Apps: %v \n", apps)
-
-	// fmt.Print(fmt.Sprintf("%s\n", resp.Body()))
-	// fmt.Print(reflect.TypeOf(resp.Body()), "\n")
-
-	marshallErr := json.Unmarshal([]byte(ss), &tempArrs)
-	if marshallErr != nil {
-		panic(marshallErr)
+	r, err := client.Do(req)
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	//--
+	defer r.Body.Close()
 
-	// apps := json.Unmarshal(resp.Body(), &tempArrs)
-	// fmt.Printf("\n Apps: %v \n", apps)
+	apps := make([]map[string]interface{}, 0)
+	err = json.NewDecoder(r.Body).Decode(&apps)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
-	if err := d.Set("apps", marshallErr); err != nil {
+	if err := d.Set("apps", apps); err != nil {
 		return diag.FromErr(err)
 	}
 
