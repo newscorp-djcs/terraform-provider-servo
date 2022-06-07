@@ -44,7 +44,7 @@ func dataSourceApps() *schema.Resource {
 						},
 						"handle": &schema.Schema{
 							Type:     schema.TypeString,
-							Computed: true,
+							Required: true,
 						},
 						"context": &schema.Schema{
 							Type:     schema.TypeString,
@@ -60,7 +60,7 @@ func dataSourceApps() *schema.Resource {
 						// },
 						"source": &schema.Schema{
 							Type:     schema.TypeInt,
-							Computed: true,
+							Required: true,
 						},
 					},
 				},
