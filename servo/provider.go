@@ -1,7 +1,12 @@
 package servo
 
 import (
+	"context"
+	"os"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"golang.org/x/vuln/client"
 )
 
 // Provider -
@@ -20,5 +25,14 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"servo_app": dataSourceApps(),
 		},
+		ConfigureContextFunc: configure,
 	}
+}
+
+func configure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	// Token := d.Get("token").(string)
+	Token := os.Getenv("SERVO_TOKEN")
+
+	httpClient, _ := client.NewClient(nil, &Token)
+	return httpClient, nil
 }
