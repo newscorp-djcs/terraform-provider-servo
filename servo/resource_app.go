@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 
-	"strconv"
 	"strings"
 
 	// cError "github.com/coreos/etcd/error"
@@ -26,7 +25,7 @@ type Client struct {
 }
 
 type App struct {
-	ID     int    `json:"id,omitempty"`
+	// ID     int    `json:"id,omitempty"`
 	Handle string `json:"handle,omitempty"`
 	Source string `json:"source,omitempty"`
 }
@@ -43,6 +42,10 @@ func resourceApp() *schema.Resource {
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						// "id": &schema.Schema{
+						// 	Type:     schema.TypeInt,
+						// 	Required: true,
+						// },
 						"handle": &schema.Schema{
 							Type:     schema.TypeString,
 							Required: true,
@@ -59,7 +62,7 @@ func resourceApp() *schema.Resource {
 }
 
 func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	c := m.(*Client)
+	c := m.(Client)
 
 	app_handle := d.Get("app_handle").(string)
 	source := d.Get("source").(string)
@@ -89,13 +92,14 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 
 	Token := os.Getenv("SERVO_TOKEN")
 
-	o, err := c.CreateApp(ois, Token)
+	// o, err := c.CreateApp(ois, Token)
+	c.CreateApp(ois, Token)
 
-	if err != nil {
-		return diag.FromErr(err)
-	}
+	// if err != nil {
+	// 	return diag.FromErr(err)
+	// }
 
-	d.SetId(strconv.Itoa(o.ID))
+	// d.SetId(strconv.Itoa(o.ID))
 
 	return diags
 }
