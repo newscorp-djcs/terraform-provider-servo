@@ -115,7 +115,7 @@ func (c *Client) CreateApp(newApp App, Token string) (*AppsRes, error) {
 		return nil, err
 	}
 
-	// req.Header.Set("Content-type", "application/json")
+	req.Header.Set("Content-type", "application/json")
 	req.Header.Set("token", Token)
 
 	// body, err := c.doRequest(req, Token)
