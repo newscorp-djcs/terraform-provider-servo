@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	// "gopkg.in/resty.v1"
-	"local-servo-poc/client"
+	"terraform-provider-servo/client"
 )
 
 var Token string
@@ -96,7 +96,7 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	// }
 
 	// Token := os.Getenv("SERVO_TOKEN")
-	Token := os.Getenv("SERVO_TOKEN")
+	Token := c.Token
 
 	// o, err := c.CreateApp(ois, Token)
 	_, err := c.CreateApp(ois, Token)
