@@ -35,10 +35,6 @@ func NewClient(host, token *string) (*Client, error) {
 }
 
 func (c *Client) doRequest(req *http.Request) ([]byte, error) {
-	token := c.Token
-
-	req.Header.Set("token", token)
-
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -71,22 +67,22 @@ func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error)
 	req.Header.Set("Content-type", "application/json")
 	req.Header.Set("token", c.Token)
 
-	// body, err := c.doRequest(req, Token)
+	body, err := c.doRequest(req)
 	//---
-	res, err := c.HTTPClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
+	// res, err := c.HTTPClient.Do(req)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
+	// body, err := ioutil.ReadAll(res.Body)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("status: %d, body: %s", res.StatusCode, body)
-	}
+	// if res.StatusCode != http.StatusOK {
+	// 	return nil, fmt.Errorf("status: %d, body: %s", res.StatusCode, body)
+	// }
 
 	//---
 	if err != nil {
@@ -100,4 +96,24 @@ func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error)
 	}
 
 	return &app, nil
+}
+
+func (c *Client) GetApp(orderID string) (*AppsRes, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/orders/%s", c.HostURL, orderID), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	appsRes := AppsRes{}
+	err = json.Unmarshal(body, &appsRes)
+	if err != nil {
+		return nil, err
+	}
+
+	return &appsRes, nil
 }

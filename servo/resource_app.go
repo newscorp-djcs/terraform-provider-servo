@@ -2,7 +2,9 @@ package servo
 
 import (
 	"context"
+	"encoding/json"
 	"os"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -97,7 +99,7 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	// Token := c.Token
 
 	// o, err := c.CreateApp(ois, Token)
-	_, err := c.CreateApp(ois, appConfig)
+	o, err := c.CreateApp(ois, appConfig)
 	if err != nil {
 		os.WriteFile("logs", []byte(err.Error()), 0644)
 	}
@@ -106,23 +108,25 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	// 	return diag.FromErr(err)
 	// }
 
-	// d.SetId(strconv.Itoa(o.ID))
+	d.SetId(strconv.Itoa(o.ID))
 
 	return diags
 }
 
 func resourceAppRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	// c := m.(*Client)
+	c := m.(*client.Client)
 
 	// // Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	// orderID := d.Id()
+	appID := d.Id()
 
-	// order, err := c.GetOrder(orderID)
-	// if err != nil {
-	//   return diag.FromErr(err)
-	// }
+	appRes, err := c.GetApp(appID)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	logs, err := json.Marshal(appRes)
+	os.WriteFile("GetAppRes", logs, 0644)
 
 	// orderItems := flattenOrderItems(&order.Items)
 	// if err := d.Set("items", orderItems); err != nil {
