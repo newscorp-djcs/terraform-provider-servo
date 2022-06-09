@@ -8,7 +8,14 @@ terraform {
 }
 
 provider "servo" {
-  # token = ""
+  # token = var.SERVO_TOKEN
+}
+
+resource "servo_app" "test" {
+  app = {
+    handle = "terraform-provider-test"
+    source = "https://github.dowjones.net/servo3/example"
+  }
 }
 
 # module "apps" {
@@ -18,18 +25,10 @@ provider "servo" {
 # }
 
 # output "apps" {
+#   # value = module.apps.source
 #   value = module.apps.all_apps
 # }
 
-resource "servo_app" "test" {
-  app {
-    handle = "provider-test"
-    source = "https://github.com/test/myapp.git"
-  }
+# variable "SERVO_TOKEN" {}
 
-}
-
-# output "edu_order" {
-#   value = servo_app.test
-# }
-
+ 

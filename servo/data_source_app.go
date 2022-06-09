@@ -13,22 +13,23 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"local-servo-poc/client"
 )
 
-type AppsRes struct {
-	Metadata  Metadata `json:"metadata"`
-	Handle    string   `json:"handle"`
-	Context   string   `json:"context"`
-	UpdatedAt int64    `json:"updated_at,omitempty"`
-	CreatedAt int64    `json:"created_at"`
-	Source    string   `json:"source"`
-	ID        int      `json:"id"`
-}
-type Metadata struct {
-	Stacks int `json:"stacks"`
-}
+// type AppsRes struct {
+// 	Metadata  Metadata `json:"metadata"`
+// 	Handle    string   `json:"handle"`
+// 	Context   string   `json:"context"`
+// 	UpdatedAt int64    `json:"updated_at,omitempty"`
+// 	CreatedAt int64    `json:"created_at"`
+// 	Source    string   `json:"source"`
+// 	ID        int      `json:"id"`
+// }
+// type Metadata struct {
+// 	Stacks int `json:"stacks"`
+// }
 
-type ArApps []AppsRes
+type ArApps []client.AppsRes
 
 func dataSourceApps() *schema.Resource {
 	return &schema.Resource{

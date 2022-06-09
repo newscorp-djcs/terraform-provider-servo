@@ -6,7 +6,9 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"golang.org/x/vuln/client"
+
+	// "golang.org/x/vuln/client"
+	"local-servo-poc/client"
 )
 
 // Provider -

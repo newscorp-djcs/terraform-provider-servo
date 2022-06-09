@@ -12,10 +12,10 @@ variable "app_handle" {
   default = "admin-djcss"
 }
 
-data "servo_apps" "all" {}
+# data "servo_app" "all" {}
 
 # Returns all apps
-output "all_apps" {
-  value = data.servo_apps.all
-}
+# output "all_apps" {
+#   value = data.servo_app.all
+# }
 
