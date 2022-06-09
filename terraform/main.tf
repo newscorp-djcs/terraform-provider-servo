@@ -8,12 +8,26 @@ terraform {
 }
 
 provider "servo" {
-  # token = var.SERVO_TOKEN
+  token = var.SERVO_TOKEN
 }
 
+variable "REGION" {
+  type = string
+  default = "virginia"
+}
+
+variable "ORG" {
+  type = string
+  default = "dev"
+}
+
+variable "SERVO_TOKEN" {}
+
 resource "servo_app" "test" {
+  region = var.REGION
+  org = var.ORG
   app = {
-    handle = "terraform-provider-test"
+    handle = "terraform-provider-test-fred"
     source = "https://github.dowjones.net/servo3/example"
   }
 }

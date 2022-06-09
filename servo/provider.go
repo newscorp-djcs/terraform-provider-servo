@@ -2,7 +2,6 @@ package servo
 
 import (
 	"context"
-	"os"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -31,9 +30,8 @@ func Provider() *schema.Provider {
 }
 
 func configure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	// Token := d.Get("token").(string)
-	Token := os.Getenv("SERVO_TOKEN")
-
+	Token := d.Get("token").(string)
 	httpClient, _ := client.NewClient(nil, &Token)
+
 	return httpClient, nil
 }

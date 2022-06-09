@@ -26,4 +26,11 @@ type App struct {
 	// ID     int    `json:"id,omitempty"`
 	Handle string `json:"handle,omitempty"`
 	Source string `json:"source,omitempty"`
+	// Region string `json:"region,omitempty"`
+	// Org    string `json:"org,omitempty"`
+}
+
+type AppConfig struct {
+	Region string `json:"region,omitempty"`
+	Org    string `json:"org,omitempty"`
 }

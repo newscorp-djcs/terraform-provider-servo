@@ -57,6 +57,20 @@ func resourceApp() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"region": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+				// Elem: &schema.Schema{
+				// 	Type: schema.TypeString,
+				// },
+			},
+			"org": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+				// Elem: &schema.Schema{
+				// 	Type: schema.TypeString,
+				// },
+			},
 		},
 	}
 }
@@ -65,6 +79,8 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	c := m.(*client.Client)
 
 	app := d.Get("app").(map[string]interface{})
+	region := d.Get("region").(string)
+	org := d.Get("org").(string)
 
 	app_handle := app["handle"].(string)
 	source := app["source"].(string)
@@ -79,6 +95,11 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	ois := client.App{
 		Handle: app_handle,
 		Source: source,
+	}
+
+	appConfig := client.AppConfig{
+		Region: region,
+		Org:    org,
 	}
 
 	// for _, item := range items {
@@ -96,10 +117,10 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	// }
 
 	// Token := os.Getenv("SERVO_TOKEN")
-	Token := c.Token
+	// Token := c.Token
 
 	// o, err := c.CreateApp(ois, Token)
-	_, err := c.CreateApp(ois, Token)
+	_, err := c.CreateApp(ois, appConfig)
 	if err != nil {
 		os.WriteFile("logs", []byte(err.Error()), 0644)
 	}

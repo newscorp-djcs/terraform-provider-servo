@@ -10,7 +10,7 @@ import (
 )
 
 // HostURL - Default Servo URL
-const HostURL string = "https://next.onservo.com/api"
+const HostURL string = "https://next.onservo.com/api/"
 
 // var Token string = os.Getenv("SERVO_TOKEN")
 
@@ -57,19 +57,19 @@ func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 	return body, err
 }
 
-func (c *Client) CreateApp(newApp App, Token string) (*AppsRes, error) {
+func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error) {
 	rb, err := json.Marshal(newApp)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%sorgs/dev/regions/virginia/apps", "https://next.onservo.com/api/"), strings.NewReader(string(rb)))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%sorgs/%s/regions/%s/apps", HostURL, newAppConfig.Org, newAppConfig.Region), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
 	}
 
 	req.Header.Set("Content-type", "application/json")
-	req.Header.Set("token", Token)
+	req.Header.Set("token", c.Token)
 
 	// body, err := c.doRequest(req, Token)
 	//---
