@@ -31,3 +31,5 @@ terraform.rc
 .vscode
 
 debuggingAPIResponse 
+logs
+run.sh
