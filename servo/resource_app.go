@@ -95,18 +95,11 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	// 	ois = append(ois, oi)
 	// }
 
-	// Token := os.Getenv("SERVO_TOKEN")
-	// Token := c.Token
-
-	// o, err := c.CreateApp(ois, Token)
 	o, err := c.CreateApp(ois, appConfig)
 	if err != nil {
 		os.WriteFile("logs", []byte(err.Error()), 0644)
+		return diag.FromErr(err)
 	}
-
-	// if err != nil {
-	// 	return diag.FromErr(err)
-	// }
 
 	d.SetId(strconv.Itoa(o.ID))
 
