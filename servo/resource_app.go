@@ -19,8 +19,12 @@ func resourceApp() *schema.Resource {
 		UpdateContext: resourceAppUpdate,
 		DeleteContext: resourceAppDelete,
 		Schema: map[string]*schema.Schema{
-			"app": &schema.Schema{
-				Type:     schema.TypeMap,
+			"handle": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"source": &schema.Schema{
+				Type:     schema.TypeString,
 				Required: true,
 				// Elem: &schema.Resource{
 				// 	Schema: map[string]*schema.Schema{
@@ -38,9 +42,9 @@ func resourceApp() *schema.Resource {
 				// 		},
 				// 	},
 				// },
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
+				// Elem: &schema.Schema{
+				// 	Type: schema.TypeString,
+				// },
 			},
 			"region": &schema.Schema{
 				Type:     schema.TypeString,
@@ -57,15 +61,10 @@ func resourceApp() *schema.Resource {
 func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	c := m.(*client.Client)
 
-	app := d.Get("app").(map[string]interface{})
 	region := d.Get("region").(string)
 	org := d.Get("org").(string)
-
-	app_handle := app["handle"].(string)
-	source := app["source"].(string)
-
-	// app_handle := d.Get("handle").(string)
-	// source := d.Get("source").(string)
+	app_handle := d.Get("handle").(string)
+	source := d.Get("source").(string)
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
@@ -95,18 +94,11 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	// 	ois = append(ois, oi)
 	// }
 
-	// Token := os.Getenv("SERVO_TOKEN")
-	// Token := c.Token
-
-	// o, err := c.CreateApp(ois, Token)
 	o, err := c.CreateApp(ois, appConfig)
 	if err != nil {
 		os.WriteFile("logs", []byte(err.Error()), 0644)
+		return diag.FromErr(err)
 	}
-
-	// if err != nil {
-	// 	return diag.FromErr(err)
-	// }
 
 	d.SetId(strconv.Itoa(o.ID))
 

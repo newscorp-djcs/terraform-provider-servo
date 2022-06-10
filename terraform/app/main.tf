@@ -7,15 +7,9 @@ terraform {
   }
 }
 
-variable "app_handle" {
-  type    = string
-  default = "admin-djcss"
+resource "servo_app" "test" {
+  region = var.region
+  org = var.org
+  handle = "terraform-provider-test"
+  source = "https://github.dowjones.net/servo3/example"
 }
-
-# data "servo_app" "all" {}
-
-# Returns all apps
-# output "all_apps" {
-#   value = data.servo_app.all
-# }
-
