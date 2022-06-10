@@ -110,6 +110,8 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 
 	d.SetId(strconv.Itoa(o.ID))
 
+	// resourceAppRead(ctx, d, m)
+
 	return diags
 }
 
@@ -120,18 +122,18 @@ func resourceAppRead(ctx context.Context, d *schema.ResourceData, m interface{})
 	var diags diag.Diagnostics
 
 	appID := d.Id()
+	appConfig := client.AppConfig{}
+	app := client.App{}
 
-	appRes, err := c.GetApp(appID)
+	appRes, err := c.GetApp(appID, appConfig, app)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	logs, err := json.Marshal(appRes)
-	os.WriteFile("GetAppRes", logs, 0644)
 
-	// orderItems := flattenOrderItems(&order.Items)
-	// if err := d.Set("items", orderItems); err != nil {
-	//   return diag.FromErr(err)
-	// }
+	appData := flattenAppAttributes(&appRes)
+	if err := d.Set("appInfo", appData); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diags
 }
@@ -145,4 +147,16 @@ func resourceAppDelete(ctx context.Context, d *schema.ResourceData, m interface{
 	var diags diag.Diagnostics
 
 	return diags
+}
+
+func flattenAppAttributes(appRes client.AppsRes) []interface{} {
+	a := make(map[string]interface{})
+	a["id"] = appRes.ID
+	a["context"] = appRes.Context
+	a["handle"] = appRes.Handle
+	a["updatedAt"] = appRes.UpdatedAt
+	a["createdAt"] = appRes.CreatedAt
+	a["source"] = appRes.Source
+
+	return []interface{}{a}
 }

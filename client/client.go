@@ -68,23 +68,7 @@ func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error)
 	req.Header.Set("token", c.Token)
 
 	body, err := c.doRequest(req)
-	//---
-	// res, err := c.HTTPClient.Do(req)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// defer res.Body.Close()
 
-	// body, err := ioutil.ReadAll(res.Body)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// if res.StatusCode != http.StatusOK {
-	// 	return nil, fmt.Errorf("status: %d, body: %s", res.StatusCode, body)
-	// }
-
-	//---
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +82,8 @@ func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error)
 	return &app, nil
 }
 
-func (c *Client) GetApp(orderID string) (*AppsRes, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/orders/%s", c.HostURL, orderID), nil)
+func (c *Client) GetApp(AppID string, appConfig AppConfig, app App) (*AppsRes, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/%s/regions/%s/apps/%s", HostURL, appConfig.Org, appConfig.Region, app.Handle), nil)
 	if err != nil {
 		return nil, err
 	}
