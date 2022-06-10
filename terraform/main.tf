@@ -11,8 +11,12 @@ provider "servo" {
   token = var.SERVO_TOKEN
 }
 
-module app {
+module "app" {
   source = "./app"
   region = "virginia"
-  org = "dev"
+  org    = "dev"
+}
+
+output "app_handle" {
+  value = module.app.app_handle
 }
