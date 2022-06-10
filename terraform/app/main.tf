@@ -10,6 +10,6 @@ terraform {
 resource "servo_app" "test" {
   region = var.region
   org = var.org
-  handle = "terraform-provider-test"
+  handle = "terraform-provider-test2"
   source = "https://github.dowjones.net/servo3/example"
 }
