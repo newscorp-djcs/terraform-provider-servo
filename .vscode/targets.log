@@ -6,8 +6,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `all'.  Stop.
 
-# Make data base, printed on Thu Jun  2 00:03:19 2022
+
+# Make data base, printed on Tue Jun 14 01:55:02 2022
 
 # Variables
 
@@ -28,6 +31,7 @@ VSCODE_LOG_NATIVE = false
 # automatic
 @F = $(notdir $@)
 # makefile
+ 
 CURDIR := /Users/federico.gutierrez/Develop/DowJones/servo/provider-poc/terraform-provider-servo
 # makefile
 SHELL = /bin/sh
@@ -48,7 +52,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/qf/wp46rzxx35s2ndjff3z0nvw40000gq/T/vscode-ipc-2e49f434-cd1f-48d5-8310-130b826e5038.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/qf/wp46rzxx35s2ndjff3z0nvw40000gq/T/vscode-ipc-7a6d6ec6-05ea-49cb-9f02-a0dfa576a8b4.sock
 # environment
 VSCODE_CWD = /Users/federico.gutierrez/Develop/DowJones/servo/provider-poc/terraform-provider-servo
 # environment
@@ -58,7 +62,7 @@ PATH = /Users/federico.gutierrez/Downloads/google-cloud-sdk/bin:/Library/Framewo
 # environment
 GOPATH = /Users/federico.gutierrez/go
 # environment
-LaunchInstanceID = A2A79389-2456-46D0-BD65-0EFD214F4E53
+LaunchInstanceID = D1882702-5206-4D17-97C1-B75F5CA809BF
 # environment
 VSCODE_LOG_STACK = false
 # environment
@@ -66,7 +70,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.zKF3ofiXVb/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.VxHGE1zBlE/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -84,7 +88,7 @@ MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /De
 # environment
 VSCODE_CLI = 1
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/federico.gutierrez/Library/Application Support/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = /Users/federico.gutierrez/Library/Application Support/Code/CachedData/4af164ea3a06f701fe3e89a2bcbb421d2026b68f
 # environment
 LOGNAME = federico.gutierrez
 # environment
@@ -132,7 +136,7 @@ TMPDIR = /var/folders/qf/wp46rzxx35s2ndjff3z0nvw40000gq/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/federico.gutierrez/Library/Application Support/Code/1.67.2-main.sock
+VSCODE_IPC_HOOK = /Users/federico.gutierrez/Library/Application Support/Code/1.68.0-main.sock
 # makefile
 MAKEFLAGS = Rrqp
 # environment
@@ -144,7 +148,7 @@ TERM_PROGRAM_VERSION = 444
 # environment
 NVM_DIR = /Users/federico.gutierrez/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.37356020.37356026.9073A45A-95D6-4D28-9C1F-D1F7846BFE0C
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.40623436.40623442.8ED21A14-66E0-4346-90FA-D563C7BC255F
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -176,7 +180,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 10651
+VSCODE_PID = 18305
 # variable set hash-table stats:
 # Load=83/1024=8%, Rehash=0, Collisions=5/108=5%
 
@@ -222,7 +226,7 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-31 23:02:28
+#  Last modified 2022-06-08 10:48:50
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -265,6 +269,7 @@ release:
 	GOOS=openbsd GOARCH=386 go build -o ./bin/${BINARY}_${VERSION}_openbsd_386
 	GOOS=openbsd GOARCH=amd64 go build -o ./bin/${BINARY}_${VERSION}_openbsd_amd64
 	GOOS=solaris GOARCH=amd64 go build -o ./bin/${BINARY}_${VERSION}_solaris_amd64
+ 
 	GOOS=windows GOARCH=386 go build -o ./bin/${BINARY}_${VERSION}_windows_386
 	GOOS=windows GOARCH=amd64 go build -o ./bin/${BINARY}_${VERSION}_windows_amd64
 	
@@ -275,20 +280,28 @@ release:
 #  Modification time never checked.
 #  File has not been updated.
 
+run:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 40):
+	make install
+	rm terraform/.terraform.lock.hcl
+	rm -R terraform/.terraform
+	rm terraform/terraform.tfstate
+	
+
 install: build
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 29):
 	mkdir -p ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
- 
-make: *** No rule to make target `all'.  Stop.
-
 	mv ${BINARY} ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
 	
 
 # files hash-table stats:
-# Load=10/1024=1%, Rehash=0, Collisions=0/24=0%
+# Load=11/1024=1%, Rehash=0, Collisions=0/25=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -300,6 +313,6 @@ make: *** No rule to make target `all'.  Stop.
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Thu Jun  2 00:03:19 2022
+# Finished Make data base on Tue Jun 14 01:55:02 2022
 
  

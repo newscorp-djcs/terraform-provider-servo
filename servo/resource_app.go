@@ -2,7 +2,7 @@ package servo
 
 import (
 	"context"
-	"encoding/json"
+	// "encoding/json"
 	"os"
 	"strconv"
 
@@ -19,32 +19,32 @@ func resourceApp() *schema.Resource {
 		UpdateContext: resourceAppUpdate,
 		DeleteContext: resourceAppDelete,
 		Schema: map[string]*schema.Schema{
+			"metadata": &schema.Schema{
+				Type:     schema.TypeMap,
+				Computed: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeInt,
+				},
+			},
+			"context": &schema.Schema{
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 			"handle": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"createdAt": &schema.Schema{
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"updatedAt": &schema.Schema{
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
 			"source": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				// Elem: &schema.Resource{
-				// 	Schema: map[string]*schema.Schema{
-				// 		// "id": &schema.Schema{
-				// 		// 	Type:     schema.TypeInt,
-				// 		// 	Required: true,
-				// 		// },
-				// 		"handle": &schema.Schema{
-				// 			Type:     schema.TypeString,
-				// 			Required: true,
-				// 		},
-				// 		"source": &schema.Schema{
-				// 			Type:     schema.TypeString,
-				// 			Required: true,
-				// 		},
-				// 	},
-				// },
-				// Elem: &schema.Schema{
-				// 	Type: schema.TypeString,
-				// },
 			},
 			"region": &schema.Schema{
 				Type:     schema.TypeString,
@@ -53,10 +53,6 @@ func resourceApp() *schema.Resource {
 			"org": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-			},
-			"context": &schema.Schema{
-				Type:     schema.TypeString,
-				Computed: true,
 			},
 		},
 	}
@@ -126,7 +122,7 @@ func resourceAppRead(ctx context.Context, d *schema.ResourceData, m interface{})
 		return diag.FromErr(err)
 	}
 
-	appData := flattenAppAttributes(&appRes)
+	appData := flattenAppAttributes(appRes)
 	if err := d.Set("appInfo", appData); err != nil {
 		return diag.FromErr(err)
 	}
@@ -145,7 +141,7 @@ func resourceAppDelete(ctx context.Context, d *schema.ResourceData, m interface{
 	return diags
 }
 
-func flattenAppAttributes(appRes client.AppsRes) []interface{} {
+func flattenAppAttributes(appRes *client.AppsRes) []interface{} {
 	a := make(map[string]interface{})
 	a["id"] = appRes.ID
 	a["context"] = appRes.Context

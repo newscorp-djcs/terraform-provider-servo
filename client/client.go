@@ -82,22 +82,25 @@ func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error)
 	return &app, nil
 }
 
-func (c *Client) GetApp(AppID string, appConfig AppConfig, app App) (*AppsRes, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/%s/regions/%s/apps/%s", HostURL, appConfig.Org, appConfig.Region, app.Handle), nil)
-	if err != nil {
-		return nil, err
-	}
+func (c *Client) GetApp(AppID string, appConfig AppConfig, app App) (AppsRes, error) {
+	// req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/%s/regions/%s/apps/%s", HostURL, appConfig.Org, appConfig.Region, app.Handle), nil)
+	req, _ := http.NewRequest("GET", fmt.Sprintf("%sorgs/%s/regions/%s/apps/%s", HostURL, appConfig.Org, appConfig.Region, app.Handle), nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	body, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
+	// body, err := c.doRequest(req)
+	body, _ := c.doRequest(req)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	appsRes := AppsRes{}
-	err = json.Unmarshal(body, &appsRes)
-	if err != nil {
-		return nil, err
-	}
+	// err = json.Unmarshal(body, &appsRes)
+	json.Unmarshal(body, &appsRes)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	return &appsRes, nil
+	return appsRes, nil
 }
