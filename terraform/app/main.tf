@@ -13,3 +13,7 @@ resource "servo_app" "test" {
   handle = "terraform-provider-test-fred"
   source = "https://github.dowjones.net/servo3/example"
 }
+
+output "servo_app" {
+  value = servo_app.test  
+}

@@ -87,30 +87,45 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 
 	d.SetId(appId)
 
-	// resourceAppRead(ctx, d, m)
+	resourceAppRead(ctx, d, m)
 
 	return diags
 }
 
 func resourceAppRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	// c := m.(*client.Client)
+	c := m.(*client.Client)
 
-	// // Warning or errors can be collected in a slice type
+	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	// appID := d.Id()
+	appID := d.Id()
 	// appConfig := client.AppConfig{}
 	// app := client.App{}
 
-	// appRes, err := c.GetApp(appID, appConfig, app)
-	// if err != nil {
-	// 	return diag.FromErr(err)
-	// }
+	appResp, err := c.GetApp(appID)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
-	// appData := flattenAppAttributes(appRes)
-	// if err := d.Set("appInfo", appData); err != nil {
-	// 	return diag.FromErr(err)
-	// }
+	// appData := flattenAppAttributes(appResp)
+	if err := d.Set("metadata", appResp.Metadata); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("handle", appResp.Handle); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("context", appResp.Context); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("updated_at", appResp.UpdatedAt); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("created_at", appResp.CreatedAt); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("source", appResp.Source); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diags
 }
@@ -126,15 +141,16 @@ func resourceAppDelete(ctx context.Context, d *schema.ResourceData, m interface{
 	return diags
 }
 
-// func flattenAppAttributes(appRes *client.AppsRes) []interface{} {
+// func flattenAppAttributes(appRes *client.AppsRes) interface{} {
 // 	a := make(map[string]interface{})
 // 	// a["id"] = appRes.ID
-// 	a["id"] = appRes.Context + "/" + appRes.Handle
-// 	a["context"] = appRes.Context
+// 	a["metadata"] = appRes.Metadata
 // 	a["handle"] = appRes.Handle
+// 	a["context"] = appRes.Context
 // 	a["updatedAt"] = appRes.UpdatedAt
 // 	a["createdAt"] = appRes.CreatedAt
 // 	a["source"] = appRes.Source
 
-// 	return []interface{}{a}
+// 	// return []interface{}{a}
+// 	return a
 // }

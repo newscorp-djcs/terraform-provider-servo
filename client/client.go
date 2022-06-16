@@ -68,7 +68,6 @@ func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error)
 	req.Header.Set("token", c.Token)
 
 	body, err := c.doRequest(req)
-
 	if err != nil {
 		return nil, err
 	}
@@ -82,25 +81,29 @@ func (c *Client) CreateApp(newApp App, newAppConfig AppConfig) (*AppsRes, error)
 	return &app, nil
 }
 
-func (c *Client) GetApp(AppID string, appConfig AppConfig, app App) (AppsRes, error) {
-	// req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/%s/regions/%s/apps/%s", HostURL, appConfig.Org, appConfig.Region, app.Handle), nil)
-	req, _ := http.NewRequest("GET", fmt.Sprintf("%sorgs/%s/regions/%s/apps/%s", HostURL, appConfig.Org, appConfig.Region, app.Handle), nil)
-	// if err != nil {
-	// 	return nil, err
-	// }
+func (c *Client) GetApp(AppID string) (*AppsRes, error) {
 
-	// body, err := c.doRequest(req)
-	body, _ := c.doRequest(req)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	sId := strings.Split(AppID, "/")
+	sContext := strings.Split(sId[0], ":")
+	org := sContext[1]
+	region := sContext[2]
+	handle := sId[1]
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("%sorgs/%s/regions/%s/apps/%s", HostURL, org, region, handle), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
 
 	appsRes := AppsRes{}
-	// err = json.Unmarshal(body, &appsRes)
-	json.Unmarshal(body, &appsRes)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	err = json.Unmarshal(body, &appsRes)
+	if err != nil {
+		return nil, err
+	}
 
-	return appsRes, nil
+	return &appsRes, nil
 }

@@ -16,3 +16,7 @@ module app {
   region = "virginia"
   org = "dev"
 }
+
+output "servo_app" {
+  value = module.app
+}
