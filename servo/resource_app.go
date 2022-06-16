@@ -2,9 +2,7 @@ package servo
 
 import (
 	"context"
-	// "encoding/json"
 	"os"
-	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -34,11 +32,11 @@ func resourceApp() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"createdAt": &schema.Schema{
+			"created_at": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"updatedAt": &schema.Schema{
+			"updated_at": &schema.Schema{
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
@@ -69,8 +67,7 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	// items := d.Get("app").([]interface{})
-	ois := client.App{
+	ac := client.App{
 		Handle: app_handle,
 		Source: source,
 	}
@@ -80,27 +77,15 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 		Org:    org,
 	}
 
-	// for _, item := range items {
-	// 	i := item.(map[string]interface{})
-
-	// 	// co := i["handle"].([]interface{})[0]
-	// 	// coffee := co.(map[string]interface{})
-
-	// 	oi := App{
-	// 		Handle: i["handle"].(string),
-	// 		Source: i["source"].(string),
-	// 	}
-
-	// 	ois = append(ois, oi)
-	// }
-
-	o, err := c.CreateApp(ois, appConfig)
+	ar, err := c.CreateApp(ac, appConfig)
 	if err != nil {
 		os.WriteFile("logs", []byte(err.Error()), 0644)
 		return diag.FromErr(err)
 	}
 
-	d.SetId(strconv.Itoa(o.ID))
+	appId := ar.Context + "/" + ar.Handle
+
+	d.SetId(appId)
 
 	// resourceAppRead(ctx, d, m)
 
@@ -108,24 +93,24 @@ func resourceAppCreate(ctx context.Context, d *schema.ResourceData, m interface{
 }
 
 func resourceAppRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	c := m.(*client.Client)
+	// c := m.(*client.Client)
 
 	// // Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	appID := d.Id()
-	appConfig := client.AppConfig{}
-	app := client.App{}
+	// appID := d.Id()
+	// appConfig := client.AppConfig{}
+	// app := client.App{}
 
-	appRes, err := c.GetApp(appID, appConfig, app)
-	if err != nil {
-		return diag.FromErr(err)
-	}
+	// appRes, err := c.GetApp(appID, appConfig, app)
+	// if err != nil {
+	// 	return diag.FromErr(err)
+	// }
 
-	appData := flattenAppAttributes(appRes)
-	if err := d.Set("appInfo", appData); err != nil {
-		return diag.FromErr(err)
-	}
+	// appData := flattenAppAttributes(appRes)
+	// if err := d.Set("appInfo", appData); err != nil {
+	// 	return diag.FromErr(err)
+	// }
 
 	return diags
 }
@@ -141,14 +126,15 @@ func resourceAppDelete(ctx context.Context, d *schema.ResourceData, m interface{
 	return diags
 }
 
-func flattenAppAttributes(appRes *client.AppsRes) []interface{} {
-	a := make(map[string]interface{})
-	a["id"] = appRes.ID
-	a["context"] = appRes.Context
-	a["handle"] = appRes.Handle
-	a["updatedAt"] = appRes.UpdatedAt
-	a["createdAt"] = appRes.CreatedAt
-	a["source"] = appRes.Source
+// func flattenAppAttributes(appRes *client.AppsRes) []interface{} {
+// 	a := make(map[string]interface{})
+// 	// a["id"] = appRes.ID
+// 	a["id"] = appRes.Context + "/" + appRes.Handle
+// 	a["context"] = appRes.Context
+// 	a["handle"] = appRes.Handle
+// 	a["updatedAt"] = appRes.UpdatedAt
+// 	a["createdAt"] = appRes.CreatedAt
+// 	a["source"] = appRes.Source
 
-	return []interface{}{a}
-}
+// 	return []interface{}{a}
+// }
