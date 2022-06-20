@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -94,7 +95,11 @@ func (c *Client) GetApp(AppID string) (*AppsRes, error) {
 		return nil, err
 	}
 
+	req.Header.Set("Content-type", "application/json")
+	req.Header.Set("token", c.Token)
+
 	body, err := c.doRequest(req)
+	os.WriteFile("logsGETclient", []byte(body), 0644)
 	if err != nil {
 		return nil, err
 	}

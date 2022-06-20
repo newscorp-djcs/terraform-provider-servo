@@ -104,6 +104,7 @@ func resourceAppRead(ctx context.Context, d *schema.ResourceData, m interface{})
 
 	appResp, err := c.GetApp(appID)
 	if err != nil {
+		os.WriteFile("logsGETerr", []byte(err.Error()), 0644)
 		return diag.FromErr(err)
 	}
 
