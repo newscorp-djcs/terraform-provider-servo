@@ -106,6 +106,7 @@ func (c *Client) GetApp(AppID string) (*AppsRes, error) {
 
 	appsRes := AppsRes{}
 	err = json.Unmarshal(body, &appsRes)
+	os.WriteFile("logGETclient", []byte(fmt.Sprintf("%v", appsRes)), 0644)
 	if err != nil {
 		return nil, err
 	}

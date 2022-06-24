@@ -13,8 +13,8 @@ type AppsRes struct {
 	Metadata  Metadata `json:"metadata"`
 	Handle    string   `json:"handle"`
 	Context   string   `json:"context"`
-	UpdatedAt int64    `json:"updated_at,omitempty"`
-	CreatedAt int64    `json:"created_at"`
+	UpdatedAt int64    `json:"updatedAt,omitempty"`
+	CreatedAt int64    `json:"createdAt"`
 	Source    string   `json:"source"`
 	ID        int      `json:"id"`
 }

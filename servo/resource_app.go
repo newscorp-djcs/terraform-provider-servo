@@ -20,8 +20,15 @@ func resourceApp() *schema.Resource {
 			"metadata": &schema.Schema{
 				Type:     schema.TypeMap,
 				Computed: true,
+				// Elem: &schema.Resource{
 				Elem: &schema.Schema{
 					Type: schema.TypeInt,
+					// Schema: map[string]*schema.Schema{
+					// 	"stacks": &schema.Schema{
+					// 		Type:     schema.TypeInt,
+					// 		Computed: true,
+					// 	},
+					// },
 				},
 			},
 			"context": &schema.Schema{
@@ -108,8 +115,13 @@ func resourceAppRead(ctx context.Context, d *schema.ResourceData, m interface{})
 		return diag.FromErr(err)
 	}
 
+	metadata := make(map[string]int)
+	// metadata := schema.NewSet()
+	metadata["stacks"] = appResp.Metadata.Stacks
+
 	// appData := flattenAppAttributes(appResp)
-	if err := d.Set("metadata", appResp.Metadata); err != nil {
+	if err := d.Set("metadata", metadata); err != nil {
+		os.WriteFile("logs-set", []byte(err.Error()), 0644)
 		return diag.FromErr(err)
 	}
 	if err := d.Set("handle", appResp.Handle); err != nil {
